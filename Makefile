@@ -1,7 +1,13 @@
-all: build
+CFLAGS=-std=c++20
 
-build:
-	g++ main.cpp -std=c++20 -Iinclude -lpthread -lpqxx -lcpr -o auth_server
+all: user_auth utils
+	g++ $(CFLAGS) -lpthread -lpqxx -lcpr -o auth_server main.cpp endpoints/user_auth.o utils.o
 
-run: build
+user_auth: endpoints/user_auth.cpp
+	g++ $(CFLAGS) -c -I. -o endpoints/user_auth.o endpoints/user_auth.cpp
+
+utils: utils.cpp
+	g++ $(CFLAGS) -c utils.cpp
+
+run: all
 	./auth_server
