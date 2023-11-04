@@ -5,9 +5,11 @@
 
 #include "config.h"
 #include "endpoints/user_auth.h"
+#include "endpoints/perm_control.h"
 
 void (* HANDLERS[])(crow::SimpleApp*, pqxx::connection*) = {
-    &register_gh_handlers
+    &register_gh_handlers,
+    &register_perm_handlers
 };
 
 int main() {
@@ -18,7 +20,7 @@ int main() {
     // Init tables
     db_work.exec0(
         "CREATE TABLE IF NOT EXISTS users ("
-            "id         varchar PRIMARY KEY,"
+            "id         int PRIMARY KEY,"
             "chat_id    bigint UNIQUE NOT NULL,"
             "roles      varchar[] NOT NULL,"
             "name       varchar,"

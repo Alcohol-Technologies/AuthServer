@@ -1,5 +1,5 @@
 #include <string>
-#include "external/json.hpp"
+#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
