@@ -1,1 +1,1 @@
-void register_perm_handlers(crow::SimpleApp *app, pqxx::connection *db_conn);
+void register_perm_handlers(App *app, pqxx::connection *db_conn);

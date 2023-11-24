@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 #include "external/crow_all.h"
 
+#include "main.h"
 #include "utils.h"
 #include "config.h"
 
@@ -28,7 +29,7 @@ const std::map<std::string, role> ROLE_MAP = {
     {"admin", Admin}
 };
 
-void register_perm_handlers(crow::SimpleApp *app, pqxx::connection *db_conn) {
+void register_perm_handlers(App *app, pqxx::connection *db_conn) {
     // Main perm check method
     CROW_ROUTE((*app), "/auth_action").methods(crow::HTTPMethod::POST)([db_conn](const crow::request& req){
         json data;

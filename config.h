@@ -3,3 +3,6 @@
 #define LISTEN_PORT      8080
 
 #define JWT_SECRET       "topsecretvalue!"
+
+#define API_SECRET       "almostsecure!"
+#define API_ADMIN_SECRET "adminalmostsecure!"

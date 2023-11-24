@@ -8,12 +8,13 @@
 #include <nlohmann/json.hpp>
 #include "external/crow_all.h"
 
+#include "main.h"
 #include "utils.h"
 #include "config.h"
 
 using json = nlohmann::json;
 
-void register_info_handlers(crow::SimpleApp *app, pqxx::connection *db_conn) {
+void register_info_handlers(App *app, pqxx::connection *db_conn) {
     // User info
     CROW_ROUTE((*app), "/user_info").methods(crow::HTTPMethod::GET)([db_conn](const crow::request& req){
         std::string user_id;

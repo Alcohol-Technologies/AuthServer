@@ -3,16 +3,31 @@
 #include <pqxx/pqxx>
 #include "external/crow_all.h"
 
+#include "main.h"
+#include "utils.h"
 #include "config.h"
 #include "endpoints/user_auth.h"
 #include "endpoints/perm_control.h"
 #include "endpoints/user_info.h"
 
-void (* HANDLERS[])(crow::SimpleApp*, pqxx::connection*) = {
+void (* HANDLERS[])(App*, pqxx::connection*) = {
     &register_gh_handlers,
     &register_perm_handlers,
     &register_info_handlers
 };
+
+// Security middleware
+struct SecurityMiddleware::context {};
+void SecurityMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx) {
+    auto it = req.headers.find("Security-Token");
+    if (it == req.headers.end() || (it->second != API_SECRET && it->second != API_ADMIN_SECRET)) {
+        res.code = 401;
+        res.body = gen_error_json("unauthorized", "Unauthorized");
+        res.end();
+        CROW_LOG_INFO << "Auth attempt fail! Got token " << it->second;
+    }
+}
+void SecurityMiddleware::after_handle(crow::request& req, crow::response& res, context& ctx) {}
 
 int main() {
     // Database
@@ -40,7 +55,7 @@ int main() {
     db_work.commit();
 
     // Crow HTTP framework
-    crow::SimpleApp app;
+    App app;
 
     // Register all declared handlers
     for (auto &it : HANDLERS) {

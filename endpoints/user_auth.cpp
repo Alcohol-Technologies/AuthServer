@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 #include "external/crow_all.h"
 
+#include "main.h"
 #include "config.h"
 #include "utils.h"
 
@@ -14,7 +15,7 @@ using json = nlohmann::json;
 
 const std::string CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-void register_gh_handlers(crow::SimpleApp *app, pqxx::connection *db_conn) {
+void register_gh_handlers(App *app, pqxx::connection *db_conn) {
     // User register start
     CROW_ROUTE((*app), "/start_register").methods(crow::HTTPMethod::POST)([db_conn](const crow::request& req){
         json data;
