@@ -6,10 +6,12 @@
 #include "config.h"
 #include "endpoints/user_auth.h"
 #include "endpoints/perm_control.h"
+#include "endpoints/user_info.h"
 
 void (* HANDLERS[])(crow::SimpleApp*, pqxx::connection*) = {
     &register_gh_handlers,
-    &register_perm_handlers
+    &register_perm_handlers,
+    &register_info_handlers
 };
 
 int main() {
