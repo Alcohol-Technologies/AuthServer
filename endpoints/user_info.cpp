@@ -1,16 +1,12 @@
 #include <string>
-#include <chrono>
-#include <map>
 #include <vector>
 
 #include <pqxx/pqxx>
-#include <jwt/jwt.hpp>
 #include <nlohmann/json.hpp>
 #include "external/crow_all.h"
 
 #include "main.h"
 #include "utils.h"
-#include "config.h"
 
 using json = nlohmann::json;
 
@@ -43,6 +39,7 @@ void register_info_handlers(App *app, pqxx::connection *db_conn) {
                 }
                 item = role_arr.get_next();
             }
+            db_work.commit();
         } catch (const pqxx::unexpected_rows) {
             return crow::response(400, gen_error_json("user_not_registered", "This user is not registered!"));
         } catch (const std::exception& e) {
@@ -80,6 +77,7 @@ void register_info_handlers(App *app, pqxx::connection *db_conn) {
                 }
                 item = role_arr.get_next();
             }
+            db_work.commit();
         } catch (const pqxx::unexpected_rows) {
             return crow::response(400, gen_error_json("user_not_registered", "This user is not registered!"));
         } catch (const std::exception& e) {

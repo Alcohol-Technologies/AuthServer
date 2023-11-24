@@ -76,6 +76,7 @@ void register_perm_handlers(App *app, pqxx::connection *db_conn) {
                 }
                 item = role_arr.get_next();
             }
+            db_work.commit();
         } catch (const pqxx::unexpected_rows) {
             return crow::response(400, gen_error_json("user_not_registered", "This user is not registered!"));
         } catch (const std::exception& e) {
