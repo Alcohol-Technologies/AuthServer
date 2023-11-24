@@ -13,20 +13,10 @@
 
 using json = nlohmann::json;
 
-enum role {
-    Student,
-    Admin
-};
-
 const std::map<std::string, role> ACTION_PERMS = {
     {"get_schedule", Student},
     {"update_schedule", Admin},
     {"start_admin_session", Admin}
-};
-
-const std::map<std::string, role> ROLE_MAP = {
-    {"student", Student},
-    {"admin", Admin}
 };
 
 void register_perm_handlers(App *app, pqxx::connection *db_conn) {
