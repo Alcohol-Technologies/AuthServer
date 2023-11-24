@@ -1,10 +1,12 @@
 enum role {
     Student,
+    Teacher,
     Admin
 };
 
 const std::map<std::string, role> ROLE_MAP = {
     {"student", Student},
+    {"teacher", Teacher},
     {"admin", Admin}
 };
 
