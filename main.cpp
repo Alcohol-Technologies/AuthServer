@@ -11,6 +11,8 @@
 #include "endpoints/user_info.h"
 #include "endpoints/admin.h"
 
+ConfigWorker CONFIG = ConfigWorker();
+
 void (* HANDLERS[])(App*, pqxx::connection*) = {
     &register_gh_handlers,
     &register_perm_handlers,
@@ -21,7 +23,7 @@ void (* HANDLERS[])(App*, pqxx::connection*) = {
 // Security middlewares
 void SecurityMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx) {
     auto it = req.headers.find("Security-Token");
-    if (it == req.headers.end() || (it->second != API_SECRET && it->second != API_ADMIN_SECRET)) {
+    if (it == req.headers.end() || (it->second != CONFIG.api_secret() && it->second != CONFIG.api_admin_secret())) {
         res.code = 401;
         res.body = gen_error_json("unauthorized", "Unauthorized");
         res.end();
@@ -32,7 +34,7 @@ void SecurityMiddleware::after_handle(crow::request& req, crow::response& res, c
 
 void AdminSecMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx) {
     auto it = req.headers.find("Security-Token");
-    if (it->second != API_ADMIN_SECRET) {
+    if (it->second != CONFIG.api_admin_secret()) {
         res.code = 401;
         res.body = gen_error_json("unauthorized", "Unauthorized");
         res.end();
@@ -74,5 +76,5 @@ int main() {
         it(&app, &db_conn);
     }
 
-    app.port(LISTEN_PORT).run();
+    app.port(CONFIG.listen_port()).run();
 }

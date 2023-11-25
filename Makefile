@@ -1,11 +1,11 @@
 CFLAGS=-std=c++20
 LDFLAGS=-lpthread -lpqxx -lcpr -lcrypto
 
-all: main user_auth perm_control user_info admin utils
-	g++ $(CFLAGS) $(LDFLAGS) -o auth_server main.o endpoints/user_auth.o endpoints/perm_control.o endpoints/user_info.o endpoints/admin.o utils.o
+all: main user_auth perm_control user_info admin utils config
+	g++ $(CFLAGS) $(LDFLAGS) -o auth_server main.o endpoints/user_auth.o endpoints/perm_control.o endpoints/user_info.o endpoints/admin.o utils.o config.o
 
 bin:
-	g++ $(CFLAGS) $(LDFLAGS) -o auth_server main.o endpoints/user_auth.o endpoints/perm_control.o endpoints/user_info.o endpoints/admin.o utils.o
+	g++ $(CFLAGS) $(LDFLAGS) -o auth_server main.o endpoints/user_auth.o endpoints/perm_control.o endpoints/user_info.o endpoints/admin.o utils.o config.o
 
 main: main.cpp
 	g++ $(CFLAGS) -c main.cpp
@@ -24,6 +24,9 @@ admin: endpoints/admin.cpp
 
 utils: utils.cpp
 	g++ $(CFLAGS) -c utils.cpp
+
+config: config.cpp
+	g++ $(CFLAGS) -c config.cpp
 
 run: all
 	./auth_server

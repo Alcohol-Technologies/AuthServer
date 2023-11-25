@@ -8,7 +8,6 @@
 
 #include "main.h"
 #include "utils.h"
-#include "config.h"
 
 using json = nlohmann::json;
 

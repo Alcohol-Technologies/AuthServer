@@ -12,6 +12,7 @@
 #include "utils.h"
 
 using json = nlohmann::json;
+extern ConfigWorker CONFIG;
 
 const std::string CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
@@ -58,7 +59,7 @@ void register_gh_handlers(App *app, pqxx::connection *db_conn) {
 
         json resp;
         resp["status"] = "ok";
-        resp["url"] = "https://github.com/login/oauth/authorize?client_id=" + std::string(OAUTH_APP_ID) + "&state=" + token;
+        resp["url"] = "https://github.com/login/oauth/authorize?client_id=" + std::string(CONFIG.oauth_app_id()) + "&state=" + token;
         return crow::response(resp.dump());
     });
 
@@ -91,8 +92,8 @@ void register_gh_handlers(App *app, pqxx::connection *db_conn) {
         cpr::Response token_r = cpr::Post(
             cpr::Url{"https://github.com/login/oauth/access_token"},
             cpr::Payload{
-                {"client_id", OAUTH_APP_ID},
-                {"client_secret", OAUTH_APP_SECRET},
+                {"client_id", CONFIG.oauth_app_id()},
+                {"client_secret", CONFIG.oauth_app_secret()},
                 {"code", code}
             },
             cpr::Header{{"Accept", "application/json"}}

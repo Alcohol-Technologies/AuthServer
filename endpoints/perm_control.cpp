@@ -12,6 +12,7 @@
 #include "config.h"
 
 using json = nlohmann::json;
+extern ConfigWorker CONFIG;
 
 const std::map<std::string, role> ACTION_PERMS = {
     {"get_schedule", Student},
@@ -79,7 +80,7 @@ void register_perm_handlers(App *app, pqxx::connection *db_conn) {
         if (allowed) {
             jwt::jwt_object token {
                 jwt::params::algorithm("HS256"),
-                jwt::params::secret(JWT_SECRET)
+                jwt::params::secret(CONFIG.jwt_secret())
             };
             token.add_claim("sub", std::to_string(user_id));
             token.add_claim("name", user_name);

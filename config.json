@@ -1,0 +1,14 @@
+{
+    "oauth": {
+        "appId": "insert here",
+        "appSecret": "insert here"
+    },
+    "net": {
+        "port": 8080
+    },
+    "secrets": {
+        "api": "almostsecure!",
+        "apiAdmin": "adminalmostsecure!",
+        "jwt": "topsecretvalue!"
+    }
+}
