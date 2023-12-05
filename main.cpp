@@ -27,7 +27,7 @@ void SecurityMiddleware::before_handle(crow::request& req, crow::response& res, 
         res.code = 401;
         res.body = gen_error_json("unauthorized", "Unauthorized");
         res.end();
-        CROW_LOG_INFO << "Auth attempt fail! Got token " << it->second;
+        CROW_LOG_INFO << "Auth attempt fail! Got token " << (it == req.headers.end() ? "null" : it->second);
     }
 }
 void SecurityMiddleware::after_handle(crow::request& req, crow::response& res, context& ctx) {}
