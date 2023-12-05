@@ -20,9 +20,16 @@ void (* HANDLERS[])(App*, pqxx::connection*) = {
     &register_admin_handlers
 };
 
+const std::string INSECURE_PATHS[] = {
+    "/finish_auth"
+};
+
 // Security middlewares
 void SecurityMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx) {
     auto it = req.headers.find("Security-Token");
+    if (INSECURE_PATHS->find(req.url) != std::string::npos) {
+        return;
+    }
     if (it == req.headers.end() || (it->second != CONFIG.api_secret() && it->second != CONFIG.api_admin_secret())) {
         res.code = 401;
         res.body = gen_error_json("unauthorized", "Unauthorized");
